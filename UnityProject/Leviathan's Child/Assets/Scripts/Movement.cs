@@ -22,8 +22,8 @@ public class Movement : MonoBehaviour
     private float downCameraLimit = 0;
 
     public float speed = 5f;
-    public float runSpeedMultiplier = 1.4f;
-    public float rollSpeedMultiplier = 1.7f;
+    public float runSpeedMultiplier = 1.5f;
+    public float rollSpeedMultiplier = 2f;
 
     private bool rolling = false;
     private bool running = false;
