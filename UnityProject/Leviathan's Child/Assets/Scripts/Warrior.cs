@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Action
@@ -14,7 +15,7 @@ public class Action
     }
 }
 
-public class Warrior : MonoBehaviour, ICharacter
+public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
 {
     enum directions
     {
@@ -23,6 +24,8 @@ public class Warrior : MonoBehaviour, ICharacter
         RIGHT = 3,
         LEFT = 4
     }
+
+    public PhotonView pv;
 
     public string characterName { get; private set; }
     public string job { get; private set; }
@@ -47,7 +50,8 @@ public class Warrior : MonoBehaviour, ICharacter
     private Transform objectTransform;
     private Rigidbody2D objectRB;
 
-    private Transform cameraTransform;
+    public GameObject mainCamera;
+    public GameObject myCamera;
     private float rightCameraLimit = 0;
     private float leftCameraLimit = 0;
     private float topCameraLimit = 0;
@@ -76,17 +80,25 @@ public class Warrior : MonoBehaviour, ICharacter
     private int xLookingTo = 0;
     private int yLookingTo = (int)directions.DOWN;
 
+    private Vector3 smoothMove;
+
     public void Start()
     {
-        stamina = maxStamina;
-        hp = maxHp;
+        if (photonView.IsMine)
+        {
+            mainCamera = GameObject.Find("Main Camera");
+            mainCamera.SetActive(false);
+            myCamera.SetActive(true);
 
-        objectAnimator = GetComponent<Animator>();
-        objectTransform = GetComponent<Transform>();
-        objectRB = GetComponent<Rigidbody2D>();
-        cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
-        cameraTransform.position = new Vector3(objectTransform.position.x, objectTransform.position.y, -10f);
-        AssignLimits();
+            stamina = maxStamina;
+            hp = maxHp;
+
+            objectAnimator = GetComponent<Animator>();
+            objectTransform = GetComponent<Transform>();
+            objectRB = GetComponent<Rigidbody2D>();
+            myCamera.transform.position = new Vector3(objectTransform.position.x, objectTransform.position.y, -10f);
+            AssignLimits();
+        }
     }
 
     public void AssignLimits()
@@ -99,14 +111,21 @@ public class Warrior : MonoBehaviour, ICharacter
 
     public void Update()
     {
-        TryMove();
-        SetMovingAnimation();
-        SetSpriteLookingDirection();
-        CameraFollow();
-        CheckClick();
-        SetAttackAnimation();
-        SetSpecialAnimation();
-        Regein();
+        if (photonView.IsMine)
+        {
+            TryMove();
+            SetMovingAnimation();
+            SetSpriteLookingDirection();
+            CameraFollow();
+            CheckClick();
+            SetAttackAnimation();
+            SetSpecialAnimation();
+            Regein();
+        }
+        else
+        {
+            SmoothMovement();
+        }
     }
 
     public void TryMove()
@@ -195,6 +214,7 @@ public class Warrior : MonoBehaviour, ICharacter
         objectRB.MovePosition(objectTransform.position + (movement * Time.deltaTime));
     }
 
+
     public void SetLookingDirection(float horizontalAxis, float verticalAxis)
     {
         xLookingTo = horizontalAxis != 0
@@ -239,17 +259,17 @@ public class Warrior : MonoBehaviour, ICharacter
 
     public void CameraFollow()
     {
-        if (cameraTransform == null)
+        if (myCamera.transform == null)
             return;
 
-        float cameraPositionX = cameraTransform.position.x;
-        float cameraPositionY = cameraTransform.position.y;
+        float cameraPositionX = myCamera.transform.position.x;
+        float cameraPositionY = myCamera.transform.position.y;
         float playerPositionX = objectTransform.position.x;
         float playerPositionY = objectTransform.position.y;
         float newCameraPositionX = playerPositionX <= rightCameraLimit && playerPositionX >= leftCameraLimit ? playerPositionX : cameraPositionX;
         float newCameraPostionY = playerPositionY <= topCameraLimit && playerPositionY >= downCameraLimit ? playerPositionY : cameraPositionY;
 
-        cameraTransform.position = new Vector3(newCameraPositionX, newCameraPostionY, -10);
+        myCamera.transform.position = new Vector3(newCameraPositionX, newCameraPostionY, -10);
     }
 
     public void CheckClick()
@@ -325,6 +345,11 @@ public class Warrior : MonoBehaviour, ICharacter
         return false;
     }
 
+    private void SmoothMovement()
+    {
+        transform.position = Vector3.Lerp(transform.position, smoothMove, Time.deltaTime * 10);
+    }
+
     public IEnumerator RollTimer(float secondsToWait)
     {
         rolling = true;
@@ -351,5 +376,17 @@ public class Warrior : MonoBehaviour, ICharacter
         attack3.finished = false;
         yield return new WaitForSeconds(secondsToWait);
         attack3.active = false;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+        }
+        else if (stream.IsReading)
+        {
+            smoothMove = (Vector3)stream.ReceiveNext();
+        }
     }
 }
