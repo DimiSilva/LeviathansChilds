@@ -11,7 +11,7 @@ public class User
     public string status { get; private set; }
 
 
-    public User(Guid id, string fisrtName, string lastName, string nick, string emailAdress, string password, string status)
+    public User(Guid id, string fisrtName, string lastName, string nick, string emailAdress, string password)
     {
         this.id = id;
         this.fisrtName = fisrtName;
@@ -19,6 +19,12 @@ public class User
         this.nick = nick;
         this.emailAdress = emailAdress;
         this.password = password;
-        this.status = status;
+    }
+
+    public User(string id, string firstName, string emailAdress)
+    {
+        this.id = Guid.Parse(id);
+        this.fisrtName = firstName;
+        this.emailAdress = emailAdress;
     }
 }
