@@ -22,12 +22,22 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        if (InitialSceneUIController.instance.enterRoomButton_Lobby.GetComponent<Button>().interactable)
+            InitialSceneUIController.instance.enterRoomButton_Lobby.GetComponent<Button>().interactable = false;
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("connected to master");
         base.OnConnectedToMaster();
-        PhotonNetwork.JoinLobby();
-        // PhotonNetwork.AutomaticallySyncScene = true; 
+        StartCoroutine(WaitServerBeReadyToContinueConnection());
+    }
+
+    IEnumerator WaitServerBeReadyToContinueConnection()
+    {
+        yield return new WaitForSeconds(1);
         InitialSceneUIController.instance.enterRoomButton_Lobby.GetComponent<Button>().interactable = true;
     }
 
@@ -48,20 +58,19 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         Debug.Log("creating room");
         int randomRoomName = Random.Range(0, 10000);
         RoomOptions roomOptions = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 2 };
-        PhotonNetwork.CreateRoom("Room" + randomRoomName, roomOptions, TypedLobby.Default);
+        PhotonNetwork.CreateRoom("Room" + randomRoomName, roomOptions);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        base.OnCreateRoomFailed(returnCode, message);
         Debug.Log("failed to create room");
+        base.OnCreateRoomFailed(returnCode, message);
         CreateRoom();
     }
 
     public override void OnCreatedRoom()
     {
-        base.OnCreatedRoom();
         Debug.Log("room created");
-        // Debug.Log("")
+        base.OnCreatedRoom();
     }
 }

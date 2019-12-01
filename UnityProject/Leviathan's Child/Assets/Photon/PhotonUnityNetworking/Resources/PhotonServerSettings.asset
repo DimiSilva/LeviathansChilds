@@ -50,5 +50,27 @@ MonoBehaviour:
   - CreatePlayer
   - Rpc_SetSpriteLookingDirectionLeft
   - Rpc_SetSpriteLookingDirectionRight
+  - Rpc_SetAttackAreaDirection
+  - Rpc_SetSpriteLookingDirection
+  - ConfigureMyself
+  - TakeDamage
+  - BaseCharacterConfiguration
+  - ConfigureArcane
+  - ConfigureArcher
+  - ConfigureWarrior
+  - ConfigureMyselfGameplayProperties
+  - GiveDamage
+  - GiveDamageToEnemy
+  - GetMyNumberInRoom
+  - ConfigurePlayer
+  - ConfigurePlayerGameplayProperties
+  - GetPlayerNumber
+  - RPCActiveOrInactiveAttackArea
+  - RPCConfigurePlayer
+  - RPCConfigurePlayerGameplayProperties
+  - RPCGetPlayerNumber
+  - RPCSetPlayerNumber
+  - RPCGiveDamageToEnemy
+  - RPCFinishMatch
   DisableAutoOpenWizard: 1
   ShowSettings: 0

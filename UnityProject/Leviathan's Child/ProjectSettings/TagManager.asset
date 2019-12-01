@@ -10,6 +10,10 @@ TagManager:
   - DownLimit
   - Player1
   - Player2
+  - Attack1Area
+  - Attack2Area
+  - Attack3Area
+  - Camera
   layers:
   - Default
   - TransparentFX

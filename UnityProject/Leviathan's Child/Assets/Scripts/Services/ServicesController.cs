@@ -5,9 +5,8 @@ using UnityEngine;
 public class ServicesController : MonoBehaviour
 {
     public static ServicesController instance = null;
-    // public static string apiUrl = "http://192.168.1.18:80";
-    // public static string apiUrl = "http://192.168.15.86:80";
-    public static string apiUrl = "http://10.123.65.217:80";
+    public static string apiUrl = "https://leviathanschilds.azurewebsites.net";
+
     void Awake()
     {
         if (instance == null)

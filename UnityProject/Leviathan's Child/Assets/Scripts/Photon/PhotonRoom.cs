@@ -12,16 +12,12 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public static PhotonRoom instance;
     private PhotonView PV;
 
-    // public bool isGameLoaded;
     public int currentScene;
     public int multiplayerScene;
 
-    // Player info;
     Player[] photonPlayers;
     public int playersInRoom;
     public int myNumberInRoom;
-
-    // public int playersInGame;
 
     private bool playerInArena = false;
 
@@ -34,8 +30,8 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
         {
             if (instance != this)
             {
-                Destroy(instance.gameObject);
-                instance = this;
+                Destroy(this.gameObject);
+                return;
             }
         }
 
@@ -60,23 +56,12 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        Debug.Log("joined in room");
         photonPlayers = PhotonNetwork.PlayerList;
         playersInRoom = photonPlayers.Length;
         myNumberInRoom = playersInRoom;
         PhotonNetwork.NickName = GameController.instance.selectedCharacter.name;
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             StartGame();
-        // DebugRoomInfos();
-    }
-
-    public void DebugRoomInfos()
-    {
-        if (!PhotonNetwork.InRoom) { Debug.Log("not in room"); return; }
-        Debug.Log($"in room: {PhotonNetwork.InRoom}");
-        Debug.Log($"room name: {PhotonNetwork.CurrentRoom.Name}");
-        Debug.Log($"players count: {PhotonNetwork.CurrentRoom.PlayerCount}");
-        Debug.Log($"my number in room: " + myNumberInRoom);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -85,29 +70,57 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
             StartGame();
     }
 
-    public void StartGame() => PhotonNetwork.LoadLevel(multiplayerScene);
+    public void StartGame()
+    {
+        StartCoroutine(CheckIfSomeoneHasLeftTheRoom());
+        PhotonNetwork.LoadLevel(multiplayerScene);
+    }
+
+    IEnumerator CheckIfSomeoneHasLeftTheRoom()
+    {
+        yield return new WaitForSeconds(4);
+        if (!PhotonNetwork.InRoom) yield break;
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount != 2 && currentScene == multiplayerScene)
+        {
+            QuitRooom();
+            yield break;
+        }
+
+        StartCoroutine(CheckIfSomeoneHasLeftTheRoom());
+        yield break;
+    }
+
+    public void QuitRooom()
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.LoadLevel(0);
+        playerInArena = false;
+    }
 
     void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode)
     {
+        if (currentScene == multiplayerScene)
+        {
+            InitialSceneUIController.instance.loginScreen.SetActive(false);
+            InitialSceneUIController.instance.lobbyScreen.SetActive(true);
+        }
         currentScene = scene.buildIndex;
         if (currentScene == multiplayerScene && !playerInArena)
-        {
             CreatePlayer();
-        }
     }
 
     private void CreatePlayer()
     {
-        playerInArena = true;
-        string prefabName = myNumberInRoom == 1 ? "Player1" : "Player2";
-        string characterType = GameController.instance.jobsList.Find(job => job.id == GameController.instance.selectedCharacter.job).name;
-        string prefabToInstantiateName = characterType == "Guerreiro" ? "warrior" : characterType == "Mago" ? "arcane" : characterType == "Arqueiro" ? "archer" : null;
+        string characterType = GameController.instance.selectedCharacter.job.name;
+        string prefabToInstantiateTypeName = characterType == "Guerreiro" ? "Warrior" : characterType == "Mago" ? "Arcane" : characterType == "Arqueiro" ? "Archer" : null;
+        string prefabToInstantiateName = prefabToInstantiateTypeName + myNumberInRoom.ToString();
 
         Vector3 spawnPoint = myNumberInRoom == 1 ? MatchController.instance.spawnPoints[0] : MatchController.instance.spawnPoints[1];
 
-        GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", prefabToInstantiateName), spawnPoint, Quaternion.identity, 0);
-        player.GetComponent<Warrior>().playerNumber = myNumberInRoom;
-        player.name = prefabName;
-        player.transform.GetChild(2).transform.GetChild(0).GetComponent<Text>().text = GameController.instance.selectedCharacter.name;
+        GameObject player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Characters", prefabToInstantiateTypeName, prefabToInstantiateName), spawnPoint, Quaternion.identity, 0);
+
+        playerInArena = true;
     }
 }

@@ -7,6 +7,10 @@ public class ArenaUIController : MonoBehaviour
 {
     public static ArenaUIController instance;
 
+    public GameObject loadingPanel;
+    public GameObject victoryPanel;
+    public GameObject losePanel;
+
     private void Awake()
     {
         if (instance == null)
@@ -16,8 +20,8 @@ public class ArenaUIController : MonoBehaviour
         {
             if (instance != this)
             {
-                Destroy(instance.gameObject);
-                instance = this;
+                Destroy(this.gameObject);
+                return;
             }
         }
     }

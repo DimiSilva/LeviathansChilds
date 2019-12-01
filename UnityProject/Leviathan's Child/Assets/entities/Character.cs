@@ -4,9 +4,9 @@ public class Character
 {
     public Guid id { get; private set; }
     public string name { get; private set; }
-    public Guid job { get; private set; }
-    public Guid element { get; private set; }
-    public Guid amulet { get; private set; }
+    public Job job { get; private set; }
+    public Element element { get; private set; }
+    public Amulet amulet { get; private set; }
     public int amuletLevel { get; private set; }
     public int amuletExperience { get; private set; }
     public float hp { get; private set; }
@@ -21,13 +21,13 @@ public class Character
     public int xpToUp { get; private set; }
     public int level { get; private set; }
 
-    public Character(string id, string name, string job, string element, string amulet, int amuletLevel, int amuletExperience, float hp, float strength, float agility, float intelligence, int battlesNumber, int victorysNumber, int losesNumber, int battleTimeInSeconds, int xp, int xpToUp, int level)
+    public Character(string id, string name, Job job, Element element, Amulet amulet, int amuletLevel, int amuletExperience, float hp, float strength, float agility, float intelligence, int battlesNumber, int victorysNumber, int losesNumber, int battleTimeInSeconds, int xp, int xpToUp, int level)
     {
         this.id = Guid.Parse(id);
         this.name = name;
-        this.job = Guid.Parse(job);
-        this.element = Guid.Parse(element);
-        this.amulet = Guid.Parse(amulet);
+        this.job = job;
+        this.element = element;
+        this.amulet = amulet;
         this.amuletLevel = amuletLevel;
         this.amuletExperience = amuletExperience;
         this.hp = hp;

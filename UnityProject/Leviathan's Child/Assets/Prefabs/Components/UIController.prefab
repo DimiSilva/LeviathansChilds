@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1497567857489372676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1497567857489372678}
+  - component: {fileID: 1497567857489372679}
+  m_Layer: 0
+  m_Name: UIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1497567857489372678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497567857489372676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.028653685, y: -0.3860579, z: 150.89258}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1497567857489372679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497567857489372676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3be5bde313be9b640b94e63ec5828bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginScreen: {fileID: 0}
+  characterSelectionScreen: {fileID: 0}
+  characterCreationScreen: {fileID: 0}
+  characterCreationFormScreen: {fileID: 0}
+  lobbyScreen: {fileID: 0}
+  optionsScreen: {fileID: 0}
+  waitingForPlayerScreen: {fileID: 0}
+  charactersHolder: {fileID: 0}
+  charactersCreationHolder: {fileID: 0}
+  characterFrame: {fileID: 2993978200062924820, guid: 9d57c16d921dab04cac71f2ad5e917cd,
+    type: 3}
+  characterCreationFrame: {fileID: 2993978200062924820, guid: 431433fef892f8048bad3ec45fe42ad7,
+    type: 3}
+  CharacterCreationFormJobNameText: {fileID: 0}
+  CharacterCreationFormCharacterNameInput: {fileID: 0}
+  CharacterCreationFormCharacterElementDropdown: {fileID: 0}
+  CharacterCreationFormCharacterAmuletDropdown: {fileID: 0}
+  CharacterCreationFormCreateCharacterButton: {fileID: 0}
+  enterRoomButton_Lobby: {fileID: 0}
+  warriorSprite: {fileID: 21300000, guid: d0eb923e2aeda2c4baa40b2df44d5689, type: 3}
+  arcaneSprite: {fileID: 21300000, guid: 57e99b206aaa5f547a839a47d150040e, type: 3}
+  archerSprite: {fileID: 21300000, guid: c8455159cbdf8e942802377f319f1fdd, type: 3}

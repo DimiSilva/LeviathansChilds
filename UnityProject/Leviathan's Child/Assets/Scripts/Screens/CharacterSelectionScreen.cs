@@ -41,9 +41,9 @@ public class CharacterSelectionScreen : MonoBehaviourPunCallbacks
             {
                 string id = character.GetField("id").ToString().Replace("\"", "");
                 string name = character.GetField("name").ToString().Replace("\"", "");
-                string job = character.GetField("job").ToString().Replace("\"", "");
-                string element = character.GetField("element").ToString().Replace("\"", "");
-                string amulet = character.GetField("amulet").ToString().Replace("\"", "");
+                Job job = GameController.instance.jobsList.Find(jobInList => jobInList.id.ToString() == character.GetField("job").ToString().Replace("\"", ""));
+                Element element = GameController.instance.elementsList.Find(elementInList => elementInList.id.ToString() == character.GetField("element").ToString().Replace("\"", ""));
+                Amulet amulet = GameController.instance.amuletsList.Find(amuletInList => amuletInList.id.ToString() == character.GetField("amulet").ToString().Replace("\"", ""));
                 int amuletLevel = int.Parse(character.GetField("amuletLevel").ToString().Replace("\"", ""));
                 int amuletExperience = int.Parse(character.GetField("amuletExperience").ToString().Replace("\"", ""));
                 float hp = float.Parse(character.GetField("hp").ToString().Replace("\"", ""));
@@ -73,7 +73,7 @@ public class CharacterSelectionScreen : MonoBehaviourPunCallbacks
 
         foreach (Character character in GameController.instance.userCharacters)
         {
-            Job characterJob = GameController.instance.jobsList.Find(j => j.id == character.job);
+            Job characterJob = character.job;
             GameObject charFrame = Instantiate(InitialSceneUIController.instance.characterFrame, holder.transform);
             charFrame.GetComponent<CharacterFrame>().SetCharacter(character);
             charFrame.transform.GetChild(0).GetComponent<Image>().sprite = characterJob.name == "Guerreiro" ? InitialSceneUIController.instance.warriorSprite : characterJob.name == "Mago" ? InitialSceneUIController.instance.arcaneSprite : characterJob.name == "Arqueiro" ? InitialSceneUIController.instance.archerSprite : null;

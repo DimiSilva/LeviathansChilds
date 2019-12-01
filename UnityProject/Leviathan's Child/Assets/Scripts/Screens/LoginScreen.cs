@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoginScreen : MonoBehaviour
 {
-    private bool development = true;
+    private bool development = false;
 
     [SerializeField]
     private InputField nickInput;
@@ -39,6 +39,7 @@ public class LoginScreen : MonoBehaviour
         yield return StartCoroutine(GetJobs());
         yield return StartCoroutine(GetElements());
         yield return StartCoroutine(GetAmulets());
+
         if (errorInRequests)
         {
             ConfigureInfoText("Algo deu errado", Color.red, true);
@@ -70,7 +71,11 @@ public class LoginScreen : MonoBehaviour
     IEnumerator TreatGetJobsRequisition()
     {
         if (JobService.instance.processing)
+        {
             yield return new WaitForSeconds(0.5f);
+            StartCoroutine(TreatGetJobsRequisition());
+            yield break;
+        }
 
         if (JobService.instance.responseText != null && JobService.instance.responseText.Length > 0)
         {
@@ -109,9 +114,13 @@ public class LoginScreen : MonoBehaviour
     IEnumerator TreatGetElementsRequisition()
     {
         if (ElementService.instance.processing)
+        {
             yield return new WaitForSeconds(0.5f);
+            StartCoroutine(TreatGetElementsRequisition());
+            yield break;
+        }
 
-        if (ElementService.instance.responseText != null && ElementService.instance.responseText.Length > 0)
+        else if (ElementService.instance.responseText != null && ElementService.instance.responseText.Length > 0)
         {
             List<Element> elements = new List<Element>();
             foreach (JSONObject element in ElementService.instance.responseJson.list)
@@ -141,9 +150,13 @@ public class LoginScreen : MonoBehaviour
     IEnumerator TreatGetAmuletsRequisition()
     {
         if (AmuletService.instance.processing)
+        {
             yield return new WaitForSeconds(0.5f);
+            StartCoroutine(TreatGetAmuletsRequisition());
+            yield break;
+        }
 
-        if (AmuletService.instance.responseText != null && AmuletService.instance.responseText.Length > 0)
+        else if (AmuletService.instance.responseText != null && AmuletService.instance.responseText.Length > 0)
         {
             List<Amulet> amulets = new List<Amulet>();
             foreach (JSONObject amulet in AmuletService.instance.responseJson.list)
@@ -194,9 +207,13 @@ public class LoginScreen : MonoBehaviour
     IEnumerator TreatAuthenticationRequisition()
     {
         if (UserService.instance.processing)
+        {
             yield return new WaitForSeconds(0.5f);
+            StartCoroutine(TreatAuthenticationRequisition());
+            yield break;
+        }
 
-        if (UserService.instance.responseText != null && UserService.instance.responseText.Length > 0)
+        else if (UserService.instance.responseText != null && UserService.instance.responseText.Length > 0)
         {
             ConfigureInfoText("", Color.white, false);
             GameController.instance.SetLogedUser(new User(UserService.instance.responseJson.GetField("id").ToString().Replace("\"", ""), UserService.instance.responseJson.GetField("firstName").ToString().Replace("\"", ""), UserService.instance.responseJson.GetField("emailAdress").ToString().Replace("\"", "")));
@@ -209,6 +226,6 @@ public class LoginScreen : MonoBehaviour
 
     public void OnPress_CreateAccount()
     {
-        Application.OpenURL("www.google.com.br");
+        Application.OpenURL("http://leviathans-child.surge.sh/");
     }
 }
