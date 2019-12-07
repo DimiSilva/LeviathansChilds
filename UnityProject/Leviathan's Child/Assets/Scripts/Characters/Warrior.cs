@@ -332,7 +332,7 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
 
     public void CheckIfAttack()
     {
-        if (Input.GetMouseButtonDown(0) && !(dead || MatchController.instance.matchFinished))
+        if (Input.GetMouseButtonDown(0) && !(dead || MatchController.instance.matchFinished) && !takingDamage)
             Attack();
     }
 
@@ -532,12 +532,13 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
     {
         if (special.active && !exausted)
         {
-            stamina -= damage / 2;
+            stamina -= damage * 4;
             if (stamina < 10f) exausted = true;
             return;
         }
 
-        StartCoroutine(TakingDamageTimer(0.75f));
+        StartCoroutine(TakingDamageTimer(0.45f));
+
         hp = hp - damage;
     }
 
