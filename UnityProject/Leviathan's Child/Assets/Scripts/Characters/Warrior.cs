@@ -94,6 +94,7 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
     private Action attack3 = new Action();
     private Action special = new Action();
     private bool attackInCooldown = false;
+    private bool specialInCooldown = false;
     public bool takingDamage = false;
     public bool dead = false;
 
@@ -220,9 +221,7 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
             CheckIfIsDead();
         }
         else
-        {
             SmoothMovement();
-        }
     }
 
     public void TryMove()
@@ -328,7 +327,26 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
         myCamera.transform.position = new Vector3(newCameraPositionX, newCameraPostionY, -10);
     }
 
-    public void CheckIfUsingSpecial() => special.active = !exausted && !dead && !MatchController.instance.matchFinished && Input.GetMouseButton(1) ? true : false;
+    public void CheckIfUsingSpecial()
+    {
+        if (!specialInCooldown && !exausted && !dead && !MatchController.instance.matchFinished && Input.GetMouseButton(1))
+            StartCoroutine(UseSpecial());
+    }
+
+    IEnumerator UseSpecial()
+    {
+        special.active = true;
+        yield return new WaitForSeconds(1);
+        special.active = false;
+        StartCoroutine(SpecialCooldown(2));
+    }
+
+    IEnumerator SpecialCooldown(float secondsToWait)
+    {
+        specialInCooldown = true;
+        yield return new WaitForSeconds(secondsToWait);
+        specialInCooldown = false;
+    }
 
     public void CheckIfAttack()
     {
@@ -343,9 +361,9 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
 
         if (attack1.active && !attack2.active && !exausted)
         {
-            if (stamina < 2f)
+            if (stamina < 5f)
                 exausted = true;
-            stamina -= 2f;
+            stamina -= 5f;
             StartCoroutine(Attack2Timer(0.75f));
             StartCoroutine(AttackCooldown(0.5f));
 
@@ -356,7 +374,7 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
                 exausted = true;
             stamina -= 10f;
             StartCoroutine(Attack3Timer(0.75f));
-            StartCoroutine(AttackCooldown(0.75f));
+            StartCoroutine(AttackCooldown(1.4f));
         }
         else if (!attack1.active)
         {
@@ -532,15 +550,18 @@ public class Warrior : MonoBehaviourPunCallbacks, ICharacter, IPunObservable
     {
         if (special.active && !exausted)
         {
-            stamina -= damage * 4;
+            stamina -= Random.Range(5, 15);
             if (stamina < 10f) exausted = true;
             return;
         }
 
         StartCoroutine(TakingDamageTimer(0.45f));
+        StartCoroutine(AttackCooldown(1));
 
         hp = hp - damage;
     }
+
+
 
     public IEnumerator TakingDamageTimer(float secondsToWait)
     {

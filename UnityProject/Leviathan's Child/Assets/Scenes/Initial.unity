@@ -853,7 +853,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2927321, y: 0.2513138}
   m_AnchorMax: {x: 0.70600003, y: 0.5497778}
-  m_AnchoredPosition: {x: 1.3500061, y: -105.0001}
+  m_AnchoredPosition: {x: 1.3500061, y: -105.00009}
   m_SizeDelta: {x: -2.7, y: 195.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &257509799
@@ -1232,7 +1232,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &396870901
@@ -3132,7 +3132,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &852616464
@@ -4935,7 +4935,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &1136928330
@@ -5059,7 +5059,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &1278564273
@@ -5363,7 +5363,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &1305242599
@@ -6893,7 +6893,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &1757966562
@@ -7156,10 +7156,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 206203555}
         m_MethodName: OnChange_AmuletsDropdown
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1803961588}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Dropdown, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7517,10 +7517,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 206203555}
         m_MethodName: OnChange_ElementsDropdown
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1911531502}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Dropdown, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7710,7 +7710,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Leviathans childs
+  m_Text: 'Leviathan''s childs
 
 '
 --- !u!222 &2042738282

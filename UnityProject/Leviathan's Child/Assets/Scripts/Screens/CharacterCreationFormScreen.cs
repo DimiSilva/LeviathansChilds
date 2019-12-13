@@ -12,13 +12,17 @@ public class CharacterCreationFormScreen : MonoBehaviour
 
     public void Start()
     {
+        SetupScreen();
+    }
+
+    private void SetupScreen()
+    {
         RenderSelectedJobName();
         SetupElementsInDropdown();
         SetupAmuletsInDropdown();
     }
 
-    private void RenderSelectedJobName() =>
-        InitialSceneUIController.instance.CharacterCreationFormJobNameText.GetComponent<Text>().text = selectedJob.name;
+    private void RenderSelectedJobName() => InitialSceneUIController.instance.CharacterCreationFormJobNameText.GetComponent<Text>().text = selectedJob.name;
 
     private void SetupElementsInDropdown()
     {
@@ -42,11 +46,9 @@ public class CharacterCreationFormScreen : MonoBehaviour
         InitialSceneUIController.instance.CharacterCreationFormCharacterAmuletDropdown.GetComponent<Dropdown>().options = amulets;
     }
 
-    public void OnChange_ElementsDropdown(int index) =>
-        selectedElement = GameController.instance.elementsList[index];
+    public void OnChange_ElementsDropdown(Dropdown dropdown) => selectedElement = GameController.instance.elementsList[dropdown.value];
 
-    public void OnChange_AmuletsDropdown(int index) =>
-        selectedAmulet = GameController.instance.amuletsList[index];
+    public void OnChange_AmuletsDropdown(Dropdown dropdown) => selectedAmulet = GameController.instance.amuletsList[dropdown.value];
 
     public void OnPress_BackButton()
     {
@@ -62,6 +64,10 @@ public class CharacterCreationFormScreen : MonoBehaviour
 
         CharacterService.instance.Create(characterName, selectedJob, GameController.instance.GetLogedUser(), selectedElement, selectedAmulet);
         StartCoroutine(TreatCreateCharacterRequisition());
+        InitialSceneUIController.instance.CharacterCreationFormCharacterNameInput.GetComponent<InputField>().text = "";
+        characterName = "";
+        selectedAmulet = GameController.instance.amuletsList[0];
+        selectedElement = GameController.instance.elementsList[0];
     }
 
     IEnumerator TreatCreateCharacterRequisition()
